@@ -22,6 +22,7 @@ resource "azurerm_key_vault" "keyVault" {
   }
 }
 
+
 /* Key vault secret
 resource "azurerm_key_vault_secret" "vmpassword" {
   name         = "vmpassword"
