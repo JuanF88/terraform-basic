@@ -27,6 +27,7 @@ resource "azurerm_storage_container" "newcontainer" {
     0 = "data"
     1 = "files"
     2 = "media"
+    
   }
   name                  = each.value
   storage_account_name  = "${each.key}storage121001asd"
