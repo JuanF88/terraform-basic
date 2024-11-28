@@ -8,6 +8,7 @@ resource "azurerm_resource_group" "grp-01" {
 
 // Storage Account and Blob ////////////////////////////////////////
 
+
 /*
 resource "azurerm_storage_account" "storage12321001" {
   count                    = 1
