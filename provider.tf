@@ -1,6 +1,5 @@
 
 //Terraform init
-
 terraform {
   required_providers {
     azurerm = {

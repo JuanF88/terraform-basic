@@ -6,21 +6,46 @@ resource "azurerm_resource_group" "grp-01" {
   location = local.location
 }
 
+
+//llamar al module  local
+
+module "networking_module" {
+  source              = "./networking"
+  location            = local.location
+  resource_group_name = local.resource_group_name
+  number_of_subnets   = 2
+  depends_on = [azurerm_resource_group.grp-01]
+}
+
+
+
+//llamar al module del servidor de terraform
+module "network" {
+  source              = "Azure/network/azurerm"
+  version             = "3.5.0"
+  resource_group_name = local.resource_group_name
+  vnet_name           = "app-network"
+  address_spaces      = ["10.0.0.0/16"]
+  subnet_names        = ["subnetA", "subnetB"]
+  subnet_prefixes     = ["10.0.0.0/24", "10.0.1.0/24"]
+  depends_on          = [azurerm_resource_group.grp-01]
+}
+
 // Storage Account and Blob ////////////////////////////////////////
 
 
-/*
+
 resource "azurerm_storage_account" "storage12321001" {
   count                    = 1
   name                     = "${count.index}storage121032"
-  resource_group_name      = local.resource_group_name
+  resource_group_name      = "grp-01"
   location                 = local.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
   account_kind             = "StorageV2"
   depends_on               = [azurerm_resource_group.grp-01]
 }
-*/
+
 /*
 resource "azurerm_storage_container" "newcontainer" {
   for_each = {

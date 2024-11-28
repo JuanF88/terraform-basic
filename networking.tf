@@ -12,15 +12,15 @@ resource "azurerm_virtual_network" "vnTerraform" {
 
 // Subnets Process ////////////////////////////////////////
 
-resource "azurerm_subnet" "subnets" {
-  count                = var.number_of_subnets
-  name                 = "Subnet${count.index}"
-  resource_group_name  = local.resource_group_name
-  virtual_network_name = local.virtual_network.name
-  address_prefixes     = ["10.0.${count.index + 1}.0/24"]
+# resource "azurerm_subnet" "subnets" {
+#   count                = var.number_of_subnets
+#   name                 = "Subnet${count.index}"
+#   resource_group_name  = local.resource_group_name
+#   virtual_network_name = local.virtual_network.name
+#   address_prefixes     = ["10.0.${count.index + 1}.0/24"]
 
-  depends_on = [azurerm_virtual_network.vnTerraform]
-}
+#   depends_on = [azurerm_virtual_network.vnTerraform]
+# }
 
 /*
 Network security group process ////////////////////////////////////////
