@@ -36,9 +36,9 @@ jobs:
         run: terraform plan -out=tfplan
 
   apply-deployment:
-    needs: build-and-plan
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    needs: build-and-plan
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Azure login
         uses: azure/login@v2
