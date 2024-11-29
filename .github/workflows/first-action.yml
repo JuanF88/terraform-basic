@@ -33,3 +33,14 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
+
+      - name: Confirm and Apply Terraform Plan
+        if: success()
+        run: |
+          echo "Do you want to apply the plan? (yes/no)"
+          read user_input
+          if [ "$user_input" = "yes" ]; then
+            terraform apply tfplan
+          else
+            echo "Terraform apply was skipped."
+          fi
