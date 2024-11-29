@@ -1,9 +1,16 @@
 name: Terraform Plan on Push to Main
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      apply_plan:
+        description: 'Apply Terraform plan after it is created'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - 'yes'
+          - 'no'
 
 permissions:
   id-token: write
@@ -34,13 +41,6 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-      - name: Confirm and Apply Terraform Plan
-        if: success()
-        run: |
-          echo "Do you want to apply the plan? (yes/no)"
-          read user_input
-          if [ "$user_input" = "yes" ]; then
-            terraform apply tfplan
-          else
-            echo "Terraform apply was skipped."
-          fi
+      - name: Apply Terraform Plan
+        if: ${{ inputs.apply_plan == 'yes' }}
+        run: terraform apply tfplan
