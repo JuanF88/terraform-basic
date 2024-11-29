@@ -1,10 +1,30 @@
-name: First Workflow
-on: workflow_dispatch
+name: Terraform Plan on Push to Main
+
+on:
+  workflow_dispatch:
+
 jobs:
-  first-job:
+  terraform-plan:
     runs-on: ubuntu-latest
+
     steps:
-      - name: print greeting
-        run: echo "Hello World!"
-      - name: Print Goodbye
-        run: echo "Bye"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: Configure Azure credentials
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
