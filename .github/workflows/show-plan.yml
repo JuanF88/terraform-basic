@@ -11,8 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-plan:
-    if: github.event_name == 'push'
+  build-plan-and-apply:
     runs-on: ubuntu-latest
     steps:
       - name: Azure login
@@ -36,6 +35,14 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-      - name: Apply Terraform Plan
-        run: terraform apply tfplan
+      - name: Save Terraform Plan
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add tfplan
+          git commit -m "Save Terraform plan output"
+          git push
 
+      - name: Apply Terraform Plan
+        if: github.event_name == 'workflow_dispatch'
+        run: terraform apply tfplan

@@ -26,5 +26,4 @@ resource "azurerm_key_vault_secret" "vmpassword" {
   key_vault_id = azurerm_key_vault.keyVault.id
   depends_on   = [azurerm_key_vault.keyVault]
 }
-
 */
