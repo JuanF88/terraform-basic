@@ -1,16 +1,9 @@
 name: Terraform Plan on Push to Main
 
 on:
-  workflow_dispatch:
-    inputs:
-      apply_plan:
-        description: 'Apply Terraform plan after it is created'
-        required: true
-        default: 'no'
-        type: choice
-        options:
-          - 'yes'
-          - 'no'
+  push:
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -40,7 +33,3 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-
-      - name: Apply Terraform Plan
-        if: ${{ inputs.apply_plan == 'yes' }}
-        run: terraform apply tfplan
