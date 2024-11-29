@@ -26,9 +26,10 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.ARM_CLIENT_ID }}
+          client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          auth-type: federated
+          auth-type: servicePrincipal
 
       - name: Terraform Init
         run: terraform init
