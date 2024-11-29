@@ -9,6 +9,10 @@ jobs:
   terraform-plan:
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -22,9 +26,9 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.ARM_CLIENT_ID }}
-          client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          auth-type: federated
 
       - name: Terraform Init
         run: terraform init
