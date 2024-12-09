@@ -32,7 +32,7 @@ jobs:
   terraform-plan:
     name: terraform-plan-${{ inputs.environment_name }}
     runs-on:
-        group: linux-rg
+        group: ubuntu-latest
     env:
         ARM_CLIENT_ID: ${{secrets.TF_CLIENT_ID}}
         ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
