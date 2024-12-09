@@ -13,3 +13,13 @@ variable "number_of_machines" {
   description = "this defines the number of machines"
   default     = 2
 }
+
+variable "resource_groups" {
+  description = "Map ofe settings for creating resource groups."
+  type = map(object({
+    bounded_context = string
+    location        = string
+    iterator        = optional(string, "001")
+    tags            = optional(map(any), {})
+  }))
+}

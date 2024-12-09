@@ -6,10 +6,7 @@ resource "azurerm_resource_group" "grp-01" {
   location = local.location
 }
 
-
-// Storage Account and Blob ////////////////////////////////////////
-
-
+// Storage Account ////////////////////////////////////////
 
 # resource "azurerm_storage_account" "storage12321001" {
 #   count                    = 1
@@ -22,35 +19,33 @@ resource "azurerm_resource_group" "grp-01" {
 #   depends_on               = [azurerm_resource_group.grp-01]
 # }
 
-/*
-resource "azurerm_storage_container" "newcontainer" {
-  for_each = {
-    0 = "data"
-    1 = "files"
-    2 = "media"
-    
-  }
-  name                  = each.value
-  storage_account_name  = "${each.key}storage121001asd"
-  container_access_type = "blob"
-  depends_on            = [azurerm_storage_account.storage12321001]
-}
+# resource "azurerm_storage_container" "newcontainer" {
+#   for_each = {
+#     0 = "data"
+#     1 = "files"
+#     2 = "media"
 
-resource "azurerm_storage_blob" "maintf" {
-  for_each = {
-    sample1 = "C:\\terraform\\main.tfplan"
-    sample2 = "C:\\terraform\\files\\file02.txt"
-    sample3 = "C:\\terraform\\files\\file03.txt"
-  }
-  name                   = "${each.key}.txt"
-  storage_account_name   = "1storage12321001"
-  storage_container_name = "files"
-  type                   = "Block"
-  source                 = each.value
-  depends_on             = [azurerm_storage_container.newcontainer]
-}
+#   }
+#   name                  = each.value
+#   storage_account_name  = "${each.key}storage121001asd"
+#   container_access_type = "blob"
+#   depends_on            = [azurerm_storage_account.storage12321001]
+# }
 
-*/
+# resource "azurerm_storage_blob" "maintf" {
+#   for_each = {
+#     sample1 = "C:\\terraform\\main.tfplan"
+#     sample2 = "C:\\terraform\\files\\file02.txt"
+#     sample3 = "C:\\terraform\\files\\file03.txt"
+#   }
+#   name                   = "${each.key}.txt"
+#   storage_account_name   = "1storage12321001"
+#   storage_container_name = "files"
+#   type                   = "Block"
+#   source                 = each.value
+#   depends_on             = [azurerm_storage_container.newcontainer]
+# }
+
 /*
 Creation of a VM based in a Windows ////////////////////////////////////////
 
