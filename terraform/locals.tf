@@ -7,5 +7,6 @@ locals {
     name          = "vnTerraform"
     address_space = "10.0.0.0/16"
   }
+  subscription_id = "ed650814-527f-4ad3-98f7-9af062cc8adf"
 
 }

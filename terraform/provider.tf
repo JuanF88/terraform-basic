@@ -1,20 +1,16 @@
-
-//Terraform init
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "4.5.0"
-    }
-  }
+provider "azapi" {
+  alias = "default-provider"
+  subscription_id = local.subscription_id
+  enable_hcl_output_for_data_source = true
+  skip_provider_registration = true
 }
 
-// Provider Configuration
-
 provider "azurerm" {
-  subscription_id = "ed650814-527f-4ad3-98f7-9af062cc8adf"
-  tenant_id       = "6b99c178-e515-4bb7-bda4-073a8601a463"
-  client_id       = "06db7845-49d9-4a99-b5c3-ed940162972d"
-  client_secret   = "Ulg8Q~rxMjP.hd9dYGDdfr1mTdJ2Gw0732MMvbIq"
-  features {}
+  storage_use_azuread = true
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+      recover_soft_deleted_key_vaults = true
+    }
+  }
 }
