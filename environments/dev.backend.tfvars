@@ -4,5 +4,5 @@ storage_account_name = "storage8909123"
 container_name       = "tfbackend"
 key                  = "terraform.tfstate"
 subscription_id      = "ed650814-527f-4ad3-98f7-9af062cc8adf"
-use_azuread_auth     = true
+#use_azuread_auth     = true
 
