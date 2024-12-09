@@ -1,8 +1,8 @@
 
 customer_name_abbreviation = "cca"
-domain = "claims"
-environment = "dev"
-location = "East US"
+domain                     = "claims"
+environment                = "dev"
+location                   = "East US"
 
 iterator = "001"
 resource_groups = {
