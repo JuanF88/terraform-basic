@@ -14,3 +14,12 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias = "default-provider"
+  subscription_id = local.subscription_id
+  skip_provider_registration = true
+  features {
+    
+  }
+}
