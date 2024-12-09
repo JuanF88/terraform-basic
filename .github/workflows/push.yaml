@@ -9,7 +9,7 @@ jobs:
   terraform-plan-dev:
     uses: ./.github/workflows/validate_workflow.yaml
     with:
-      backend_file: "../environments/infrastructure/dev.backend.tfvars"
+      backend_file: "../environments/dev.backend.tfvars"
       environment_name: "dev"
       tfvar_file: "../environments/dev.tfvars"
     secrets: 
