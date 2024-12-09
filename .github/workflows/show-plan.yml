@@ -37,8 +37,8 @@ jobs:
 
       - name: Save Terraform Plan
         run: |
-          git config user.name "joseimanul"
-          git config user.email "josem123321@gmail.com"
+          git config user.name "JuanF88"
+          git config user.email "juanfhurtado@unicauca.edu.co"
           git add tfplan
           git commit -m "Save Terraform plan output"
           git push
