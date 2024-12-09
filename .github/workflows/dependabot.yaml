@@ -1,0 +1,10 @@
+version: 1
+updates:
+  - package_ecosystem: "terraform"
+    directory: "/terraform"
+    schedule: 
+      interval: "monthly"
+  - package-ecosystem: "github-actions"
+    directory: "/terrafomr"
+    schedule:
+      interval: "monthly"

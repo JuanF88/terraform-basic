@@ -1,0 +1,22 @@
+name: Commit Validation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-plan-dev:
+    uses: ../.github/workflows/validate_workflow.yaml@v1
+    with:
+      backend_file: "../environments/infrastructure/dev.backend.tfvars"
+      environment_name: "dev"
+      tfvar_file: "../environments/dev.tfvars"
+    secrets: 
+      TF_ARM_CLIENT_SECRET: ${{secrets.AZURE_CLIENT_SECRET}}
+      TF_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
+      TF_GH_PAT: ${{ secrets.AZURE_EBARR_PAT}}
+      TF_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
+      TF_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+      
+

@@ -1,0 +1,106 @@
+name: Validate PR
+
+on:
+  workflow_call:
+    inputs:
+      backend_file:
+        required: true
+        type: string
+      environment_name:
+        required: true
+        type: string
+      tfvar_file:
+        required: true
+        type: string
+      tf_options:
+        required: false
+        type: string
+    secrets:
+      TF_GH_PAT:
+       required: true
+      TF_ARM_CLIENT_SECRET:
+        required: true
+      TF_CLIENT_ID:
+        required: true
+      TF_SUBSCRIPTION_ID:
+        required: true
+      TF_TENANT_ID:
+        required: true
+      
+
+jobs:
+  terraform-plan:
+    name: terraform-plan-${{ inputs.environment_name }}
+    runs-on:
+        group: linux-rg
+    env:
+        ARM_CLIENT_ID: ${{secrets.TF_CLIENT_ID}}
+        ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.TF_SUBSCRIPTION_ID}}
+        ARM_STORAGE_USE_AZUREAD: true
+        ARM_TENANT_ID: ${{secrets.TF_TENANT_ID}}
+        TF_LOG: INFO
+        TF_INPUT: false
+        working-directory: terraform
+      
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure Git
+        run: |
+          echo "machine github.com login ${USER_NAME} password ${GH_TOKEN}" > ~/.netrc
+        env:
+          GH_TOKEN: ${{ secrets.TF_GH_PAT }}
+          USER_NAME: "oauth2"
+      
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check -recursive
+              
+
+      - name: Terraform Initialization ${{ inputs.environment_name }}
+        id: init
+        run: terraform init -backend-config="${{ inputs.backend_file }}"
+        working-directory: ${{ env.working-directory }}
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan ${{ inputs.environment_name }}
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -var-file="${{ inputs.tfvar_file }}" ${{ inputs.tf_options }}
+        working-directory: ${{ env.working-directory }}
+
+      - name: Cleanup netrc
+        run: |
+          rm ~/.netrc
+
+      - name: Comment on PR 
+        id: comment
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            
+            #### Terraform  Plan ${{ inputs.environment_name }} 📖\`${{ steps.plan.outcome }}\`
+        
+            #### [Plan URL 🔗](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+              
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
